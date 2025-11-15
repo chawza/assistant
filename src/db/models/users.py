@@ -1,12 +1,11 @@
 import os
 import secrets
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+import hashlib
+from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import String, Integer, ForeignKey, DateTime
 from datetime import datetime, timedelta
-import hashlib
 
-class Base(DeclarativeBase):
-    pass
+from src.db.models import Base
 
 class User(Base):
     __tablename__ = 'auth__users'
