@@ -19,12 +19,16 @@ class AuthResponse(BaseModel):
     token: str
     user: UserSchema
 
+class LoginForm(BaseModel):
+    email: str
+    password: str
+
 
 @router.post('/login', response_model=AuthResponse)
-def login(email: str, password: str, db_session: SessionDep):
-    user = db_session.scalar(select(User).where(User.email == email))
+def login(form: LoginForm, db_session: SessionDep):
+    user = db_session.scalar(select(User).where(User.email == form.email))
 
-    if not user or not user.check_password(password):
+    if not user or not user.check_password(form.password):
         raise HTTPException(status_code=400, detail='Invalid email or password')
 
     # Create a new session
