@@ -1,6 +1,6 @@
 import os
 
-from sqlmodel import create_engine, SQLModel
+from sqlmodel import Session, create_engine, SQLModel
 from src.db.models.users import User
 import os
 
@@ -15,3 +15,7 @@ SQLModel.metadata.create_all(db_engine)
 from src.core.logging import logger
 
 logger.info(f'Database engine initialized using {db_url}')
+
+def get_session():
+    with Session(db_engine) as session:
+        yield session
