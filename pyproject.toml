@@ -9,3 +9,8 @@ dependencies = [
     "httpx>=0.28.1",
     "sqlmodel>=0.0.27",
 ]
+
+[dependency-groups]
+dev = [
+    "ptpython>=3.0.31",
+]
