@@ -1,8 +1,7 @@
 from fastapi import APIRouter
 from fastapi.exceptions import HTTPException
 from pydantic import BaseModel
-from pydantic_core.core_schema import ModelSchema
-from sqlmodel import select
+from sqlalchemy import select
 
 from src.api import SessionDep
 from src.db.models.users import User
@@ -21,14 +20,18 @@ class AuthResponse(BaseModel):
     user: UserSchema
 
 
-@router.post('/login')
-def login(email: str, password: str, session: SessionDep) -> AuthResponse:
-    user = session.exec(select(User).where(User.email == email)).first()
+@router.post('/login', response_model=AuthResponse)
+def login(email: str, password: str, session: SessionDep):
+    result = session.scalar(select(User).where(User.email == email))
 
-    if not user:
+    if not result:
         raise HTTPException(status_code=400, detail='Invalid email or password')
 
-    return AuthResponse(
-        token='some_token',
-        user=UserSchema.model_validate(user.model_dump(include={'id', 'email'}))
-    )
+
+    return {
+        'token': 'some_token',
+        'user': {
+            'id': result.id,
+            'email': result.email
+        }
+    }

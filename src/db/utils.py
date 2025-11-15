@@ -1,21 +1,19 @@
 import os
 
-from sqlmodel import Session, create_engine, SQLModel
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 from src.db.models.users import User
-import os
+from src.core.logging import logger
+
 
 database_filepath = os.environ.get('DATABASE_PATH', 'db.sqlite3')
 db_url = f'sqlite:///{database_filepath}'
 
-db_engine = create_engine(db_url, connect_args={'check_same_thread': False})
-
-# Create all tables
-SQLModel.metadata.create_all(db_engine)
-
-from src.core.logging import logger
+db_engine = create_engine(db_url, echo=True)
+SessionLocal = sessionmaker(bind=db_engine)
 
 logger.info(f'Database engine initialized using {db_url}')
 
 def get_session():
-    with Session(db_engine) as session:
+    with SessionLocal() as session:
         yield session
