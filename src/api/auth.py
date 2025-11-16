@@ -6,7 +6,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from src.api.utils import session_authenticate
-from src.db.models.users import User, Session as UserSession
+from src.models.users import User, Session as UserSession
 from src.db.utils import get_db_session
 
 

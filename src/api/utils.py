@@ -1,10 +1,9 @@
-from typing import Annotated
 from fastapi import Depends, HTTPException
 from fastapi.security import APIKeyHeader
 from sqlalchemy import select
 
 from src.db.utils import SessionLocal
-from src.db.models.users import Session
+from src.models.users import Session
 
 
 def session_authenticate(key: str = Depends(APIKeyHeader(name='Authorization'))):

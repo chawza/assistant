@@ -5,7 +5,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, Integer, ForeignKey, DateTime
 from datetime import datetime, timedelta
 
-from src.db.models import Base
+from src.models import Base
 
 class User(Base):
     __tablename__ = 'auth__users'
