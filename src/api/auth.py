@@ -1,10 +1,10 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends
 from fastapi.exceptions import HTTPException
-from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from src.api.schemas import AuthResponse, LoginForm
 from src.api.utils import session_authenticate
 from src.models.users import User, Session as UserSession
 from src.db.utils import get_db_session
@@ -13,20 +13,6 @@ from src.db.utils import get_db_session
 router = APIRouter(
     tags=['Authentication']
 )
-
-class UserSchema(BaseModel):
-    id: int
-    email: str
-
-class AuthResponse(BaseModel):
-    token: str
-    user: UserSchema
-
-class LoginForm(BaseModel):
-    email: str
-    password: str
-
-
 @router.post('/login', response_model=AuthResponse)
 def login(form: LoginForm, db_session: Annotated[Session, Depends(get_db_session)]):
     user = db_session.scalar(select(User).where(User.email == form.email))
