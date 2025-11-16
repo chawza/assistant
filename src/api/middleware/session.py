@@ -1,7 +1,7 @@
 from fastapi import HTTPException, Request, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import select
-from src.db.models.users import Session as UserSession
+from src.models.users import Session as UserSession
 from src.db.utils import get_db_session
 
 def get_current_session(session_key: str, db: Session) -> UserSession:
