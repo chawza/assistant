@@ -1,7 +1,7 @@
 import os
 import secrets
 import hashlib
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, Integer, ForeignKey, DateTime
 from datetime import datetime, timedelta
 
@@ -13,6 +13,8 @@ class User(Base):
     id: Mapped[int] = mapped_column(Integer(), primary_key=True)
     email: Mapped[str] = mapped_column(String(30), unique=True)
     password: Mapped[str] = mapped_column(String(50), default='')
+
+    sessions: Mapped[list['Session']] = relationship(back_populates="user")
 
     def set_password(self, password: str):
         self.password = self._hash_password(password)
@@ -37,6 +39,8 @@ class Session(Base):
     session_key: Mapped[str] = mapped_column(String(64), unique=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
     expires_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now() + timedelta(days=7))
+
+    user: Mapped[User] = relationship(back_populates="sessions")
 
     def __init__(self, user_id: int):
         self.user_id = user_id

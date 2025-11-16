@@ -2,7 +2,6 @@ import os
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from src.db.models.users import User
 from src.core.logging import logger
 
 
@@ -14,6 +13,6 @@ SessionLocal = sessionmaker(bind=db_engine)
 
 logger.info(f'Database engine initialized using {db_url}')
 
-def get_session():
+def get_db_session():
     with SessionLocal() as session:
         yield session

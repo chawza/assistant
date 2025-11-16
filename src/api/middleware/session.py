@@ -2,7 +2,7 @@ from fastapi import HTTPException, Request, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 from src.db.models.users import Session as UserSession
-from src.db.utils import get_session
+from src.db.utils import get_db_session
 
 def get_current_session(session_key: str, db: Session) -> UserSession:
     """Get current session from session key"""
@@ -18,7 +18,7 @@ def get_current_session(session_key: str, db: Session) -> UserSession:
 
     return session
 
-def validate_session(request: Request, db: Session = Depends(get_session)) -> UserSession:
+def validate_session(request: Request, db: Session = Depends(get_db_session)) -> UserSession:
     """Validate session from request headers"""
     auth_header = request.headers.get("Authorization")
 
