@@ -4,3 +4,4 @@ class Base(DeclarativeBase):
     pass
 
 from .users import User, Session
+from .conversations import ChatSession, ChatMessage

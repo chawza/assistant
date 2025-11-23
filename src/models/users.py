@@ -1,20 +1,25 @@
 import os
 import secrets
 import hashlib
+from typing import TYPE_CHECKING
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, Integer, ForeignKey, DateTime
 from datetime import datetime, timedelta
 
 from src.models import Base
 
+if TYPE_CHECKING:
+    from src.models.conversations import ChatSession
+
 class User(Base):
     __tablename__ = 'auth__users'
 
     id: Mapped[int] = mapped_column(Integer(), primary_key=True)
-    email: Mapped[str] = mapped_column(String(30), unique=True)
-    password: Mapped[str] = mapped_column(String(50), default='')
+    email: Mapped[str] = mapped_column(String(255), unique=True)
+    password: Mapped[str] = mapped_column(String(64), default='')
 
     sessions: Mapped[list['Session']] = relationship(back_populates="user")
+    chat_sessions: 'Mapped[list[ChatSession]]' = relationship(back_populates="user")
 
     def set_password(self, password: str):
         self.password = self._hash_password(password)
