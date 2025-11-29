@@ -12,3 +12,6 @@ wheels/
 
 # bindary
 *.sqlite3
+
+# config
+models.toml
