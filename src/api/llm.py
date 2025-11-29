@@ -89,19 +89,21 @@ async def chat(
             resp = ChatStreamResponse(response_chunk=StreamChunk(chunk=chunk), type='chunk', chat_session_id=1)
             await ws.send_text(data=resp.model_dump_json())
 
-    with db.begin():
-        user_message = ChatMessage()
-        user_message.role = 'user'
-        user_message.session_id = chat_session.id
-        user_message.content = chat_request.user_prompt
+    user_message = ChatMessage()
+    user_message.role = 'user'
+    user_message.session_id = chat_session.id
+    user_message.content = chat_request.user_prompt
 
-        assistant_message = ChatMessage()
-        assistant_message.role = 'assistant'
-        assistant_message.session_id = chat_session.id
-        assistant_message.content = ''.join(llm_chunks)
+    assistant_message = ChatMessage()
+    assistant_message.role = 'assistant'
+    assistant_message.session_id = chat_session.id
+    assistant_message.content = ''.join(llm_chunks)
 
-    db.refresh(user_message, attribute_names=['id'])
-    db.refresh(assistant_message, attribute_names=['id'])
+    db.add_all([user_message, assistant_message])
+    db.commit()
+
+    db.refresh(user_message)
+    db.refresh(assistant_message)
 
     await ws.send_text(
         ChatStreamResponse(

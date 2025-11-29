@@ -37,7 +37,7 @@ async def test_llm_websocket():
                     response_data = json.loads(response)
 
                     if response_data.get("type") == "chunk":
-                        print(response_data, end='')
+                        print(response_data['response_chunk'], end='')
                     elif response_data.get("type") == "error":
                         print(f"Error: {response_data.get('response_chunk')}")
                         break
