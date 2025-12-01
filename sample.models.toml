@@ -1,0 +1,11 @@
+['Qwen3-4b']
+vendor = "ollama"
+model = "qwen3:4b"
+base_url = "http://localhost:11434/v1"
+api_key = "ollama"
+
+['Qwen3-0.6b']
+vendor = "ollama"
+model = "qwen3:0.6b"
+base_url = "http://localhost:11434/v1"
+api_key = "ollama"

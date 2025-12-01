@@ -1,5 +1,5 @@
 from typing import Annotated
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -18,8 +18,9 @@ def login(form: LoginForm, db_session: Annotated[Session, Depends(get_db_session
     user = db_session.scalar(select(User).where(User.email == form.email))
 
     if not user or not user.check_password(form.password):
-        return ErrorResponse(
-            details=["Invalid email or password"]
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid email or password"
         )
 
     # Create a new session
